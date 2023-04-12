@@ -51,4 +51,4 @@ proxy_set_header는 기본적으로 상위 수준의 설정을 상속받는다. 
 <br>
 <br>
 
-여기서 proxy_pass로 전달되는 헤더는 MangKyu 뿐이다. 왜냐하면 더 좁은 블록인 location에 proxy_set_header가 존재하므로, 상위 블록들의 설정들은 무시되기 때문이다. 상위 블록에 존재하는 설정은 key와 하위 블록에 존재하는 key가 다름에도 불구하고 무시된다. 그러므로 이러한 부분을 주의해서 사용해야 한다.
+여기서 proxy_pass로 전달되는 헤더는 MangKyu 뿐이다. 왜냐하면 더 좁은 블록인 location에 proxy_set_header가 존재하므로, 상위 블록들의 proxy_set_header 설정들은 무시되기 때문이다. 상위 블록에 존재하는 proxy_set_header 설정은 key와 하위 블록에 존재하는 key가 다름에도 불구하고 무시된다. 그러므로 이러한 부분을 주의해서 사용해야 한다.
