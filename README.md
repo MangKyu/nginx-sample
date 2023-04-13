@@ -13,6 +13,50 @@
 <br>
 
 # 2. Nginx 설정 시의 주의사항
+## server_name 주의사항
+
+nginx는 요청이 들어오면 먼저 어느 서버 블록이 요청을 처리할 지 판단하게 되는데, server_name에 설정된 값이 이를 결정한다. 예를 들어, 80번 포트에 대한 3개의 서버 블록이 존재하는 상황이라고 하자.
+
+```nginx
+server {
+    listen      80;
+    server_name mangkyu.org www.mangkyu.org;
+    ...
+}
+
+server {
+    listen      80;
+    server_name mangkyu.net www.mangkyu.net;
+    ...
+}
+
+server {
+    listen      80;
+    server_name mangkyu.com www.mangkyu.com default_server;
+    ...
+}
+```
+
+
+
+nginx는 요청 헤더의 “Host” 값을 바탕으로 어느 서버에 요청을 라우팅할지 결정한다. 그리고 만약 매칭되는 server_name이 없거나 Host 헤더 값이 없다면, 해당 포트의 default 서버로 요청을 보내게 되고, 만약 default로 지정된 server_name이 없다면 위에서부터 가장 먼저 매칭되는 서버 블록이 처리하게 된다. 
+Host 헤더 필드가 없는 경우에 요청을 drop 시키려면 다음과 같이 설정할 수도 있다.
+
+```nginx
+server {
+    listen      80;
+    server_name "";
+    return      444;
+}
+```
+
+
+
+하나의 서버에 여러 개의 DNS가 매핑되는 상황에서 nginx를 설정하려다 보면 원하지 않는 server 블록이 요청을 처리하게 되는 문제가 발생할 수 있다. 이러한 경우에는 server_name이 올바르게 매핑되는지 확인해보면 된다.
+
+<br>
+<br>
+
 ## proxy_set_header 주의사항
 proxy_pass 시에 추가적인 헤더를 전달하기 위해서는 proxy_set_header를 사용해야 하며, http, server, location 블록에서 사용할 수 있다. 만약 별도의 설정이 없다면 아래의 2가지 헤더를 기본적으로 갖게 된다.
 
